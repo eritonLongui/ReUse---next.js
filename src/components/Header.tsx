@@ -12,7 +12,7 @@ export default async function Header() {
       <div className={styles.container}>
         <Link href="/" className={styles.logoArea}>
           <Image
-            src="/images/logotipo.png"
+            src="/images/sombreado.png"
             alt="ReUse!"
             width={140}
             height={45}

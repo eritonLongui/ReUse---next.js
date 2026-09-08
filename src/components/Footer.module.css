@@ -1,6 +1,6 @@
 .footer {
   background: #111827;
-  color: #9ca3aj;
+  color: #9ca3a3;
   padding: 4rem 1.5rem 2rem;
   margin-top: auto;
   border-top: 1px solid #1f2937;
@@ -46,7 +46,7 @@
   gap: 0.75rem;
 }
 .linkItem a {
-  color: #9ca3aj;
+  color: #9ca3a3;
   font-size: 0.9rem;
   transition: color 0.2s;
 }
