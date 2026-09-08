@@ -1,0 +1,149 @@
+
+.detailWrapper {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3rem;
+  background: #fff;
+  border-radius: var(--radius-xl);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.imageArea {
+  position: relative;
+  min-height: 440px;
+  background: #f8fafc;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.infoArea {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.catBadge {
+  display: inline-block;
+  background: #FFF4E5;
+  color: var(--color-accent);
+  padding: 0.35rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  align-self: flex-start;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.condition {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.desc {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #334155;
+  margin-bottom: 2rem;
+}
+
+.ownerCard {
+  background: #F4F6F8;
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ownerAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ownerDetails h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.ownerLocation {
+  font-size: 0.85rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+.proposalBox {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.5rem;
+  margin-top: auto;
+}
+
+.proposalTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+.btnProposta {
+  width: 100%;
+  background: var(--color-accent);
+  color: #fff;
+  padding: 0.9rem;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(255, 159, 28, 0.3);
+}
+
+.btnProposta:hover {
+  background: var(--color-accent-hover);
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .imageArea {
+    min-height: 300px;
+  }
+}

@@ -1,0 +1,172 @@
+
+.wrapper {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+}
+
+.cardHeader {
+  background: #fff;
+  border-radius: var(--radius-xl);
+  border: 1px solid #e2e8f0;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.avatarLarge {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileInfo {
+  flex: 1;
+  min-width: 250px;
+}
+
+.name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.metaRow {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.statBadges {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.statBadge {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 1rem 1.4rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.statNum {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+.statTxt {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.itensSection {
+  margin-top: 3.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnNovo {
+  background: var(--color-accent);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.2s;
+}
+
+.btnNovo:hover {
+  background: var(--color-accent-hover);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.itemCard {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.thumbArea {
+  position: relative;
+  height: 160px;
+  width: 100%;
+  background: #f1f5f9;
+}
+
+.statusPill {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.itemBody {
+  padding: 1rem;
+}
+
+.itemTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.empty {
+  text-align: center;
+  padding: 3.5rem;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px dashed #cbd5e1;
+  color: #64748b;
+}

@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id_usuario          Int          @id @default(autoincrement())
+  nome               String
+  email              String       @unique
+  senha              String
+  foto_perfil         String?
+  data_cadastro       DateTime     @default(now())
+
+  endereco            Endereco?
+  itens               Item[]
+  trocasPropostas     Troca[]      @relation("TrocasPropostas")
+  trocasRecebidas     Troca[]      @relation("TrocasRecebidas")
+  avaliacoesFeitas    Avaliacao[]  @relation("AvaliacoesFeitas")
+  avaliacoesRecebidas Avaliacao[]  @relation("AvaliacoesRecebidas")
+
+  @@map("usuarios")
+}
+
+model Endereco {
+  id_endereco   Int      @id @default(autoincrement())
+  cep           String
+  logradouro    String
+  bairro        String?
+  cidade        String
+  uf            String
+  complemento   String?
+  latitude      Float?
+  longitude     Float?
+  id_usuario    Int      @unique
+  usuario       Usuario  @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+
+  @@map("enderecos")
+}
+
+model Categoria {
+  id_categoria   Int      @id @default(autoincrement())
+  nome           String   @unique
+  descricao      String?
+  ativo          Boolean  @default(true)
+  data_cadastro  DateTime @default(now())
+
+  itens          Item[]
+
+  @@map("categorias")
+}
+
+model Item {
+  id_item             Int          @id @default(autoincrement())
+  nome                String
+  descricao           String
+  estado_conservacao  String
+  foto_item           String?
+  disponivel          Boolean      @default(true)
+  data_cadastro       DateTime     @default(now())
+
+  id_usuario          Int
+  usuario             Usuario      @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+
+  id_categoria        Int
+  categoria           Categoria    @relation(fields: [id_categoria], references: [id_categoria])
+
+  itensTroca          ItemTroca[]
+
+  @@map("itens")
+}
+
+model Troca {
+  id_troca                Int          @id @default(autoincrement())
+  id_usuario_proponente   Int
+  proponente              Usuario      @relation("TrocasPropostas", fields: [id_usuario_proponente], references: [id_usuario], onDelete: Cascade)
+
+  id_usuario_destinatario Int
+  destinatario            Usuario      @relation("TrocasRecebidas", fields: [id_usuario_destinatario], references: [id_usuario], onDelete: Cascade)
+
+  status                  String       @default("PENDENTE")
+  mensagem               String?
+  data_solicitacao       DateTime     @default(now())
+  data_resposta          DateTime?
+
+  itens                  ItemTroca[]
+
+  @@map("trocas")
+}
+
+model ItemTroca {
+  id_item_troca  Int      @id @default(autoincrement())
+  id_troca       Int
+  troca          Troca     @relation(fields: [id_troca], references: [id_troca], onDelete: Cascade)
+
+  id_item        Int
+  item          Item      @relation(fields: [id_item], references: [id_item], onDelete: Cascade)
+
+  papel_item     String   // OFERTADO, DESEJADO
+  data_registro  DateTime @default(now())
+
+  @@map("itens_troca")
+}
+
+model Avaliacao {
+  id_avaliacao   Int      @id @default(autoincrement())
+  id_avaliador   Int
+  avaliador      Usuario  @relation("AvaliacoesFeitas", fields: [id_avaliador], references: [id_usuario], onDelete: Cascade)
+
+  id_avaliado    Int
+  avaliado       Usuario  @relation("AvaliacoesRecebidas", fields: [id_avaliado], references: [id_usuario], onDelete: Cascade)
+
+  nota           Int
+  comentario     String?
+  data_cadastro  DateTime @default(now())
+
+  @@map("avaliacoes")
+}

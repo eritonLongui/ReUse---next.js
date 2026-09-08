@@ -1,0 +1,48 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --color-primary: #1F3C88;
+  --color-primary-dark: #16285A;
+  --color-accent: #FF9F1C;
+  --color-accent-hover: #e68a13;
+  --color-light: #F4F6F8;
+  --color-light-medium: #E0E3E8;
+  --color-text-primary: #1C1C1E;
+  --color-text-secondary: #6B7280;
+  --color-border: #e2e8f0;
+  --color-success: #10a378;
+  --color-danger: #e03131;
+  --color-white: #ffffff;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.09);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  font-family: sans-serif;
+  background: var(--color-light);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+input, select, textarea {
+  font-family: inherit;
+  font-size: 15px;
+}

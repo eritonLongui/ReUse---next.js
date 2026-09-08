@@ -1,0 +1,213 @@
+
+.pageWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.heroHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 0.35rem;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1.05rem;
+}
+
+.searchBar {
+  display: flex;
+  gap: 0.75rem;
+  background: #fff;
+  padding: 0.6rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid #e2e8f0;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 220px;
+  border: none;
+  outline: none;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+.categorySelect {
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  background: #f8fafc;
+  outline: none;
+  font-weight: 500;
+  color: #334155;
+}
+
+.filterBtn {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.filterBtn:hover {
+  background: var(--color-primary-dark);
+}
+
+.itemsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.75rem;
+}
+
+.itemCard {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s;
+  display: flex;
+  flex-direction: column;
+}
+
+.itemCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+
+.imageArea {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: #f1f5f9;
+}
+
+.itemImage {
+  object-fit: cover;
+}
+
+.conditionBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.categoryTag {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(31, 60, 136, 0.85);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+.contentArea {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.itemTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.itemDesc {
+  color: #64748b;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardFooter {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ownerInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.btnPropor {
+  background: var(--color-accent);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s;
+}
+
+.btnPropor:hover {
+  background: var(--color-accent-hover);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 5rem 1.5rem;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px dashed #cbd5e1;
+}

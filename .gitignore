@@ -1,0 +1,30 @@
+# Variaveis de ambiente
+.env
+.env*.local
+.env.production
+
+# Dependencias
+node_modules/
+
+# Next.js build
+.next/
+out/
+build/
+dist/
+
+# Instrucoes de IA
+AGENTS.md
+GEMINI.md
+CLAUDE.md
+.gemini/
+
+# Pasta de referencias
+*refer*ncias*
+referencias do projeto/
+referências do projeto/
+*extracted*
+
+# Logs e OS
+*.log
+.DS_Store
+Thumbs.db
