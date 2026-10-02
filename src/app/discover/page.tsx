@@ -1,18 +1,37 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
-import { Search, MapPin, ArrowRightLeft, Sparkles, Filter } from 'lucide-react';
+import { getCurrentUser } from '@/lib/auth';
+import { calculateDistanceKm, formatDistance } from '@/lib/geo';
+import { Search, MapPin, ArrowRightLeft, Sparkles, Filter, Navigation } from 'lucide-react';
 import styles from './discover.module.css';
 
 export default async function DiscoverPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; cat?: string; estado?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    cat?: string;
+    estado?: string;
+    raio?: string;
+    ordem?: string;
+  }>;
 }) {
-  const { q, cat, estado } = await searchParams;
+  const { q, cat, estado, raio, ordem } = await searchParams;
 
   let categories: Array<{ id_categoria: number; nome: string }> = [];
   let items: any[] = [];
+  const currentUser = await getCurrentUser();
+
+  const userCoords = currentUser?.endereco
+    ? {
+        latitude: currentUser.endereco.latitude,
+        longitude: currentUser.endereco.longitude,
+      }
+    : null;
+
+  const hasUserLocation =
+    userCoords?.latitude != null && userCoords?.longitude != null;
 
   try {
     categories = await prisma.categoria.findMany({
@@ -39,7 +58,7 @@ export default async function DiscoverPage({
       whereClause.estado_conservacao = estado;
     }
 
-    items = await prisma.item.findMany({
+    const fetchedItems = await prisma.item.findMany({
       where: whereClause,
       include: {
         categoria: true,
@@ -49,6 +68,48 @@ export default async function DiscoverPage({
       },
       orderBy: { data_cadastro: 'desc' },
     });
+
+    // Mapeia e calcula a distância aproximada de cada item em relação ao usuário logado
+    const itemsWithDistance = fetchedItems.map((item) => {
+      const itemCoords = item.usuario.endereco
+        ? {
+            latitude: item.usuario.endereco.latitude,
+            longitude: item.usuario.endereco.longitude,
+          }
+        : null;
+
+      const distanceKm = hasUserLocation
+        ? calculateDistanceKm(userCoords, itemCoords)
+        : null;
+
+      return {
+        ...item,
+        distanceKm,
+        formattedDistance: formatDistance(distanceKm),
+      };
+    });
+
+    // Filtro por raio de distância (se selecionado e se o usuário tiver localização)
+    const maxRadius = raio ? parseFloat(raio) : null;
+    let filteredItems = itemsWithDistance;
+
+    if (maxRadius && !isNaN(maxRadius) && hasUserLocation) {
+      filteredItems = filteredItems.filter(
+        (item) => item.distanceKm !== null && item.distanceKm <= maxRadius
+      );
+    }
+
+    // Ordenação (por proximidade ou padrão por mais recentes)
+    if (ordem === 'proximidade' && hasUserLocation) {
+      filteredItems.sort((a, b) => {
+        if (a.distanceKm === null && b.distanceKm === null) return 0;
+        if (a.distanceKm === null) return 1;
+        if (b.distanceKm === null) return -1;
+        return a.distanceKm - b.distanceKm;
+      });
+    }
+
+    items = filteredItems;
   } catch (err) {
     console.error('Discover error:', err);
   }
@@ -96,10 +157,40 @@ export default async function DiscoverPage({
           <option value="Marcas de Uso">Marcas de Uso</option>
         </select>
 
+        {/* Filtro por Raio de Distância */}
+        <select
+          name="raio"
+          defaultValue={raio || ''}
+          className={styles.categorySelect}
+          title={!hasUserLocation ? 'Cadastre seu endereço para filtrar por distância' : undefined}
+        >
+          <option value="">Qualquer Distância</option>
+          <option value="5">Até 5 km</option>
+          <option value="10">Até 10 km</option>
+          <option value="25">Até 25 km</option>
+          <option value="50">Até 50 km</option>
+        </select>
+
+        {/* Ordenação */}
+        <select name="ordem" defaultValue={ordem || ''} className={styles.categorySelect}>
+          <option value="">Mais Recentes</option>
+          <option value="proximidade">Mais Próximos</option>
+        </select>
+
         <button type="submit" className={styles.filterBtn}>
           <Filter size={16} /> Filtrar
         </button>
       </form>
+
+      {/* Dica contextual de localização quando o usuário tiver endereço */}
+      {currentUser && hasUserLocation && (
+        <div className={styles.proximityHint}>
+          <Navigation size={14} color="#1F3C88" />
+          <span>
+            Calculando distâncias a partir de <strong>{currentUser.endereco?.bairro || currentUser.endereco?.cidade}</strong>
+          </span>
+        </div>
+      )}
 
       {/* Grid de Itens */}
       {items.length === 0 ? (
@@ -109,7 +200,7 @@ export default async function DiscoverPage({
             Nenhum item encontrado
           </h3>
           <p style={{ color: '#64748b', maxWidth: '480px', margin: '0 auto 1.5rem' }}>
-            Não encontramos itens com os filtros selecionados ou ainda não há anúncios cadastrados nessa categoria.
+            Não encontramos itens com os filtros selecionados ou ainda não há anúncios cadastrados nessa categoria/raio.
           </p>
           <Link href="/itens/novo" className={styles.btnPropor}>
             Seja o primeiro a desapegar e anunciar!
@@ -146,6 +237,12 @@ export default async function DiscoverPage({
                           {item.usuario.endereco.bairro ? `${item.usuario.endereco.bairro}, ` : ''}
                           {item.usuario.endereco.cidade}/{item.usuario.endereco.uf}
                         </span>
+                      </div>
+                    )}
+                    {item.formattedDistance && (
+                      <div className={styles.distanceBadge}>
+                        <Navigation size={11} />
+                        <span>{item.formattedDistance}</span>
                       </div>
                     )}
                   </div>

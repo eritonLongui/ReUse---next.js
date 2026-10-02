@@ -187,6 +187,30 @@
   color: #94a3b8;
 }
 
+.distanceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1F3C88;
+  background-color: #EEF2FF;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  margin-top: 0.25rem;
+}
+
+.proximityHint {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-top: -1.25rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+
 .btnPropor {
   background: var(--color-accent);
   color: #fff;
