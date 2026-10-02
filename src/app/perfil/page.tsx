@@ -3,7 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
-import { User, MapPin, Mail, Calendar, Package, PlusCircle, ArrowRightLeft } from 'lucide-react';
+import { User, MapPin, Mail, Calendar, Package, PlusCircle, Heart } from 'lucide-react';
+import FavoriteButton from '@/components/FavoriteButton';
 import styles from './perfil.module.css';
 
 export default async function PerfilPage() {
@@ -12,7 +13,7 @@ export default async function PerfilPage() {
     redirect('/login');
   }
 
-  const [itens, trocasCount] = await Promise.all([
+  const [itens, trocasCount, favoritos] = await Promise.all([
     prisma.item.findMany({
       where: { id_usuario: user.id_usuario },
       include: { categoria: true },
@@ -25,6 +26,20 @@ export default async function PerfilPage() {
           { id_usuario_destinatario: user.id_usuario },
         ],
       },
+    }),
+    prisma.favorito.findMany({
+      where: { id_usuario: user.id_usuario },
+      include: {
+        item: {
+          include: {
+            categoria: true,
+            usuario: {
+              include: { endereco: true },
+            },
+          },
+        },
+      },
+      orderBy: { data_cadastro: 'desc' },
     }),
   ]);
 
@@ -55,6 +70,10 @@ export default async function PerfilPage() {
           <div className={styles.statBadge}>
             <span className={styles.statNum}>{itens.length}</span>
             <span className={styles.statTxt}>Itens Cadastrados</span>
+          </div>
+          <div className={styles.statBadge}>
+            <span className={styles.statNum}>{favoritos.length}</span>
+            <span className={styles.statTxt}>Favoritos</span>
           </div>
           <div className={styles.statBadge}>
             <span className={styles.statNum}>{trocasCount}</span>
@@ -107,6 +126,77 @@ export default async function PerfilPage() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+      </div>
+
+      {/* Meus Favoritos */}
+      <div className={styles.itensSection}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>
+            <Heart size={22} color="#EF4444" fill="#EF4444" /> Meus Favoritos ({favoritos.length})
+          </h2>
+        </div>
+
+        {favoritos.length === 0 ? (
+          <div className={styles.empty}>
+            <p>Você ainda não favoritou nenhum item.</p>
+            <Link href="/discover" className={styles.btnNovo} style={{ display: 'inline-flex', marginTop: '1rem' }}>
+              Explorar Itens no Feed
+            </Link>
+          </div>
+        ) : (
+          <div className={styles.grid}>
+            {favoritos.map((fav) => {
+              const it = fav.item;
+              return (
+                <div key={fav.id_favorito} className={styles.itemCard}>
+                  <div className={styles.thumbArea}>
+                    <Image
+                      src={it.foto_item || 'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?w=600&auto=format&fit=crop&q=80'}
+                      alt={it.nome}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                    />
+                    <div className={styles.favoriteCardAction}>
+                      <FavoriteButton
+                        itemId={it.id_item}
+                        initialIsFavorite={true}
+                        isAuthenticated={true}
+                      />
+                    </div>
+                    <span
+                      className={`${styles.statusPill} ${
+                        !it.disponivel ? styles.statusUnavailable : ''
+                      }`}
+                    >
+                      {it.disponivel ? 'Disponível' : 'Indisponível'}
+                    </span>
+                  </div>
+                  <div className={styles.itemBody}>
+                    <h3 className={styles.itemTitle}>{it.nome}</h3>
+                    <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                      {it.categoria.nome} • {it.estado_conservacao}
+                    </div>
+                    <div className={styles.favFooter}>
+                      <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                        Dono: {it.usuario.nome.split(' ')[0]}
+                      </span>
+                      <Link
+                        href={`/itens/${it.id_item}`}
+                        style={{
+                          color: '#1F3C88',
+                          fontSize: '0.85rem',
+                          fontWeight: 700,
+                        }}
+                      >
+                        Ver Detalhes →
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

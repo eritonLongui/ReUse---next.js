@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { calculateDistanceKm, formatDistance } from '@/lib/geo';
+import FavoriteButton from '@/components/FavoriteButton';
 import { Search, MapPin, ArrowRightLeft, Sparkles, Filter, Navigation } from 'lucide-react';
 import styles from './discover.module.css';
 
@@ -58,16 +59,26 @@ export default async function DiscoverPage({
       whereClause.estado_conservacao = estado;
     }
 
-    const fetchedItems = await prisma.item.findMany({
-      where: whereClause,
-      include: {
-        categoria: true,
-        usuario: {
-          include: { endereco: true },
+    const [fetchedItems, userFavorites] = await Promise.all([
+      prisma.item.findMany({
+        where: whereClause,
+        include: {
+          categoria: true,
+          usuario: {
+            include: { endereco: true },
+          },
         },
-      },
-      orderBy: { data_cadastro: 'desc' },
-    });
+        orderBy: { data_cadastro: 'desc' },
+      }),
+      currentUser
+        ? prisma.favorito.findMany({
+            where: { id_usuario: currentUser.id_usuario },
+            select: { id_item: true },
+          })
+        : Promise.resolve([]),
+    ]);
+
+    const favoriteSet = new Set(userFavorites.map((f) => f.id_item));
 
     // Mapeia e calcula a distância aproximada de cada item em relação ao usuário logado
     const itemsWithDistance = fetchedItems.map((item) => {
@@ -86,6 +97,7 @@ export default async function DiscoverPage({
         ...item,
         distanceKm,
         formattedDistance: formatDistance(distanceKm),
+        isFavorite: favoriteSet.has(item.id_item),
       };
     });
 
@@ -219,6 +231,15 @@ export default async function DiscoverPage({
                 />
                 <span className={styles.conditionBadge}>{item.estado_conservacao}</span>
                 <span className={styles.categoryTag}>{item.categoria.nome}</span>
+
+                {/* Botão de Favorito discreto sobre a imagem */}
+                <div className={styles.favoriteAction}>
+                  <FavoriteButton
+                    itemId={item.id_item}
+                    initialIsFavorite={item.isFavorite}
+                    isAuthenticated={!!currentUser}
+                  />
+                </div>
               </div>
 
               <div className={styles.contentArea}>

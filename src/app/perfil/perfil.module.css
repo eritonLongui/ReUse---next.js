@@ -170,3 +170,23 @@
   border: 1px dashed #cbd5e1;
   color: #64748b;
 }
+
+.statusUnavailable {
+  background: #FEE2E2 !important;
+  color: #DC2626 !important;
+}
+
+.favoriteCardAction {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
+.favFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+

@@ -123,6 +123,14 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
+.favoriteAction {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+}
+
+
 .categoryTag {
   position: absolute;
   bottom: 12px;

@@ -7,7 +7,7 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 ## 📌 Status Geral
 
 - [x] **Etapa 1**: Trocas por Proximidade
-- [ ] **Etapa 2**: Favoritos
+- [x] **Etapa 2**: Favoritos
 - [ ] **Etapa 3**: Histórico de Trocas
 - [ ] **Etapa 4**: Reputação e Avaliações
 - [ ] **Etapa 5**: Dashboard Simples no Perfil
@@ -39,31 +39,19 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 > **Objetivo**: Permitir que os usuários salvem itens do Feed para consulta posterior e acompanhamento fácil.
 
 ### Tarefas
-- [ ] **2.1. Modelagem Prisma**
-  - [ ] Adicionar o modelo `Favorito` em `prisma/schema.prisma`:
-    ```prisma
-    model Favorito {
-      id_favorito   Int      @id @default(autoincrement())
-      id_usuario    Int
-      id_item       Int
-      data_cadastro DateTime @default(now())
+- [x] **2.1. Modelagem Prisma**
+  - [x] Adicionar o modelo `Favorito` em `prisma/schema.prisma` com constraint única `@@unique([id_usuario, id_item])`.
+  - [x] Executado `npm run prisma:push` e `npm run prisma:generate`.
+- [x] **2.2. API Handlers**
+  - [x] Criada rota `/api/favoritos` com métodos `GET`, `POST` e `DELETE` protegidos por autenticação e validados com Zod.
+- [x] **2.3. Interface e Botão de Favoritar**
+  - [x] Criado componente client `FavoriteButton` com feedback otimista e ícone de coração (`Heart` do Lucide).
+  - [x] Integrado botão discreto nos cards do Feed (`/discover`).
+  - [x] Redirecionamento automático para `/login` para usuários não autenticados.
+- [x] **2.4. Seção no Perfil**
+  - [x] Adicionada a seção "Meus Favoritos" no `/perfil` exibindo os itens favoritados pelo usuário.
+  - [x] Badge de status seguro para itens indisponíveis/trocados e links diretos para detalhes do item.
 
-      usuario       Usuario  @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
-      item          Item     @relation(fields: [id_item], references: [id_item], onDelete: Cascade)
-
-      @@unique([id_usuario, id_item])
-      @@map("favoritos")
-    }
-    ```
-  - [ ] Rodar `npm run prisma:push` e `npm run prisma:generate`.
-- [ ] **2.2. API Handlers**
-  - [ ] Criar `POST /api/favoritos` (adicionar favorito) e `DELETE /api/favoritos` (remover favorito).
-  - [ ] Criar `GET /api/favoritos` para listar IDs de itens favoritados pelo usuário logado.
-- [ ] **2.3. Interface e Botão de Favoritar**
-  - [ ] Criar componente client `FavoriteButton` com ícone de coração (`Heart` do Lucide).
-  - [ ] Integrar o botão nos cards do Feed (`/discover`) e na página de detalhes do item (`/itens/[id]`).
-- [ ] **2.4. Seção/Página de Meus Favoritos**
-  - [ ] Criar aba ou página (`/perfil/favoritos` ou seção no `/perfil`) exibindo os itens salvos pelo usuário com opção de remoção rápida.
 
 ---
 

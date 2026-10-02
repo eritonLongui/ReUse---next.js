@@ -21,6 +21,7 @@ model Usuario {
   trocasRecebidas     Troca[]      @relation("TrocasRecebidas")
   avaliacoesFeitas    Avaliacao[]  @relation("AvaliacoesFeitas")
   avaliacoesRecebidas Avaliacao[]  @relation("AvaliacoesRecebidas")
+  favoritos           Favorito[]
 
   @@map("usuarios")
 }
@@ -69,6 +70,7 @@ model Item {
   categoria           Categoria    @relation(fields: [id_categoria], references: [id_categoria])
 
   itensTroca          ItemTroca[]
+  favoritos           Favorito[]
 
   @@map("itens")
 }
@@ -119,3 +121,17 @@ model Avaliacao {
 
   @@map("avaliacoes")
 }
+
+model Favorito {
+  id_favorito   Int      @id @default(autoincrement())
+  id_usuario    Int
+  id_item       Int
+  data_cadastro DateTime @default(now())
+
+  usuario       Usuario  @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+  item          Item     @relation(fields: [id_item], references: [id_item], onDelete: Cascade)
+
+  @@unique([id_usuario, id_item])
+  @@map("favoritos")
+}
+
