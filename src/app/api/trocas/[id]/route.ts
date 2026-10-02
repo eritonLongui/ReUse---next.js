@@ -29,12 +29,17 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ error: 'Troca não encontrada' }, { status: 404 });
     }
 
-    // Apenas destinatário pode aceitar/recusar; proponente pode cancelar
+    // Apenas destinatário pode aceitar/recusar; apenas proponente pode cancelar
     if (status === 'ACEITA' || status === 'RECUSADA') {
       if (troca.id_usuario_destinatario !== user.id_usuario) {
         return NextResponse.json({ error: 'Apenas quem recebeu a proposta pode responder' }, { status: 403 });
       }
+    } else if (status === 'CANCELADA') {
+      if (troca.id_usuario_proponente !== user.id_usuario) {
+        return NextResponse.json({ error: 'Apenas quem propôs a troca pode cancelar' }, { status: 403 });
+      }
     }
+
 
     if (status === 'ACEITA') {
       // Quando aceita, marca itens como indisponíveis

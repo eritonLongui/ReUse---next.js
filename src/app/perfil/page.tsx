@@ -13,7 +13,7 @@ export default async function PerfilPage() {
     redirect('/login');
   }
 
-  const [itens, trocasCount, favoritos] = await Promise.all([
+  const [itens, trocasRealizadasCount, favoritos] = await Promise.all([
     prisma.item.findMany({
       where: { id_usuario: user.id_usuario },
       include: { categoria: true },
@@ -21,6 +21,7 @@ export default async function PerfilPage() {
     }),
     prisma.troca.count({
       where: {
+        status: 'ACEITA',
         OR: [
           { id_usuario_proponente: user.id_usuario },
           { id_usuario_destinatario: user.id_usuario },
@@ -72,12 +73,12 @@ export default async function PerfilPage() {
             <span className={styles.statTxt}>Itens Cadastrados</span>
           </div>
           <div className={styles.statBadge}>
-            <span className={styles.statNum}>{favoritos.length}</span>
-            <span className={styles.statTxt}>Favoritos</span>
+            <span className={styles.statNum}>{trocasRealizadasCount}</span>
+            <span className={styles.statTxt}>Trocas Realizadas</span>
           </div>
           <div className={styles.statBadge}>
-            <span className={styles.statNum}>{trocasCount}</span>
-            <span className={styles.statTxt}>Negociações</span>
+            <span className={styles.statNum}>{favoritos.length}</span>
+            <span className={styles.statTxt}>Favoritos</span>
           </div>
         </div>
       </div>

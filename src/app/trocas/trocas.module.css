@@ -126,9 +126,101 @@
 
 .btnReject:hover { opacity: 0.9; }
 
+.btnCancel {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.btnCancel:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.roleBadgeProposer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #FF9F1C;
+  background: #FFF7ED;
+  border: 1px solid #FFEDD5;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.roleBadgeReceiver {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #1F3C88;
+  background: #EEF2FF;
+  border: 1px solid #E0E7FF;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.filterNav {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filterLink {
+  padding: 0.45rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.filterLink:hover {
+  border-color: #cbd5e1;
+  color: #1F3C88;
+}
+
+.filterLinkActive {
+  background: #1F3C88;
+  color: #fff !important;
+  border-color: #1F3C88;
+}
+
+.datesRow {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.emptyState {
+  background: #fff;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
 @media (max-width: 768px) {
   .tradeItems {
     grid-template-columns: 1fr;
     text-align: center;
   }
 }
+

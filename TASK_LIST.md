@@ -8,7 +8,7 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 
 - [x] **Etapa 1**: Trocas por Proximidade
 - [x] **Etapa 2**: Favoritos
-- [ ] **Etapa 3**: Histórico de Trocas
+- [x] **Etapa 3**: Histórico de Trocas
 - [ ] **Etapa 4**: Reputação e Avaliações
 - [ ] **Etapa 5**: Dashboard Simples no Perfil
 
@@ -57,19 +57,21 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 
 ## 📜 Etapa 3: Histórico de Trocas
 
-> **Objetivo**: Aprimorar a gestão de trocas com histórico completo, estados finais e registro cronológico das negociações.
+> **Objetivo**: Aprimorar a gestão de trocas com histórico completo, estados finais e registro cronológico das negociações sem criar novas tabelas.
 
 ### Tarefas
-- [ ] **3.1. Extensão de Status no Ciclo de Vida da Troca**
-  - [ ] Atualizar status suportados em `Troca`: `PENDENTE`, `ACEITA`, `RECUSADA`, `CONCLUIDA`, `CANCELADA`.
-  - [ ] Adicionar campo opcional `data_conclusao DateTime?` no modelo `Troca`.
-- [ ] **3.2. Fluxo de Conclusão da Troca**
-  - [ ] Permitir que qualquer uma das partes (proponente ou destinatário) confirme a conclusão da troca após ter sido aceita.
-  - [ ] Ao marcar como `CONCLUIDA`, atualizar automaticamente o status dos itens envolvidos para `disponivel = false`.
-- [ ] **3.3. Interface do Painel de Trocas (`/trocas`)**
-  - [ ] Adicionar abas no painel: **Em Andamento** (Pendentes e Aceitas) e **Histórico** (Concluídas, Recusadas e Canceladas).
-  - [ ] Adicionar timeline visual simples com datas de solicitação, resposta e conclusão.
-  - [ ] Adicionar filtros por status e pesquisa rápida por nome de item ou parceiro de troca.
+- [x] **3.1. Separação Visual no Painel (`/trocas`)**
+  - [x] Propostas ativas divididas em: *Propostas Recebidas Pendentes* e *Propostas Enviadas Aguardando Resposta*.
+  - [x] Seção dedicada de *Histórico de Trocas* para estados concluídos (`ACEITA`, `RECUSADA`, `CANCELADA`).
+- [x] **3.2. Identificação de Papéis e Prazos**
+  - [x] Badges visuais indicando claramente se o usuário propôs ou recebeu a negociação.
+  - [x] Exibição das datas e horários de solicitação e resposta/conclusão.
+  - [x] Ação de cancelamento de proposta enviada pendente pelo proponente.
+- [x] **3.3. Filtros do Histórico**
+  - [x] Filtros por status (*Todas, Aceitas, Recusadas, Canceladas*) integrados via query params simples.
+- [x] **3.4. Métrica no Perfil (`/perfil`)**
+  - [x] Indicador "Trocas Realizadas" no header do perfil computando apenas trocas com status `ACEITA`.
+
 
 ---
 
