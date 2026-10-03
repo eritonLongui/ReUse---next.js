@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import styles from './trocas.module.css';
 import TradeActions from './TradeActions';
+import TradeReviewAction from './TradeReviewAction';
 
 export default async function TrocasPage({
   searchParams,
@@ -28,7 +29,7 @@ export default async function TrocasPage({
 
   const { status: statusFilter } = await searchParams;
 
-  // Busca todas as trocas (recebidas e enviadas) com seus respectivos itens e usuários
+  // Busca todas as trocas (recebidas e enviadas) com seus respectivos itens, usuários e avaliações
   const [recebidas, enviadas] = await Promise.all([
     prisma.troca.findMany({
       where: { id_usuario_destinatario: user.id_usuario },
@@ -37,6 +38,7 @@ export default async function TrocasPage({
         itens: {
           include: { item: true },
         },
+        avaliacoes: true,
       },
       orderBy: { data_solicitacao: 'desc' },
     }),
@@ -47,6 +49,7 @@ export default async function TrocasPage({
         itens: {
           include: { item: true },
         },
+        avaliacoes: true,
       },
       orderBy: { data_solicitacao: 'desc' },
     }),
@@ -408,6 +411,24 @@ export default async function TrocasPage({
                 </div>
 
                 {t.mensagem && <div className={styles.message}>&ldquo;{t.mensagem}&rdquo;</div>}
+
+                {t.status === 'ACEITA' && (
+                  <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
+                    {(() => {
+                      const avaliacaoUsuario = t.avaliacoes.find((a) => a.id_avaliador === user.id_usuario);
+                      const idAvaliado = isProposer ? t.id_usuario_destinatario : t.id_usuario_proponente;
+                      return (
+                        <TradeReviewAction
+                          tradeId={t.id_troca}
+                          evaluatedId={idAvaliado}
+                          evaluatedName={parceiro}
+                          hasBeenReviewed={!!avaliacaoUsuario}
+                          existingRating={avaliacaoUsuario?.nota}
+                        />
+                      );
+                    })()}
+                  </div>
+                )}
               </div>
             );
           })

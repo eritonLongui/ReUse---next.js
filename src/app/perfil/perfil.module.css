@@ -102,6 +102,73 @@
   gap: 0.5rem;
 }
 
+.commentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.commentCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.commentUser {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatarSmall {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1f3c88;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.commentAuthor {
+  font-size: 0.95rem;
+  color: #0f172a;
+  display: block;
+}
+
+.commentDate {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.commentRating {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.commentText {
+  font-size: 0.9rem;
+  color: #334155;
+  margin: 0;
+  line-height: 1.5;
+  background-color: #f8fafc;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border-left: 3px solid #ff9f1c;
+}
+
 .btnNovo {
   background: var(--color-accent);
   color: #fff;

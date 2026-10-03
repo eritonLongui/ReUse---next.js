@@ -89,6 +89,7 @@ model Troca {
   data_resposta          DateTime?
 
   itens                  ItemTroca[]
+  avaliacoes             Avaliacao[]
 
   @@map("trocas")
 }
@@ -109,6 +110,9 @@ model ItemTroca {
 
 model Avaliacao {
   id_avaliacao   Int      @id @default(autoincrement())
+  id_troca       Int?
+  troca          Troca?   @relation(fields: [id_troca], references: [id_troca], onDelete: Cascade)
+
   id_avaliador   Int
   avaliador      Usuario  @relation("AvaliacoesFeitas", fields: [id_avaliador], references: [id_usuario], onDelete: Cascade)
 
@@ -119,6 +123,7 @@ model Avaliacao {
   comentario     String?
   data_cadastro  DateTime @default(now())
 
+  @@unique([id_troca, id_avaliador])
   @@map("avaliacoes")
 }
 

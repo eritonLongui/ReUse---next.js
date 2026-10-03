@@ -9,7 +9,7 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 - [x] **Etapa 1**: Trocas por Proximidade
 - [x] **Etapa 2**: Favoritos
 - [x] **Etapa 3**: Histórico de Trocas
-- [ ] **Etapa 4**: Reputação e Avaliações
+- [x] **Etapa 4**: Reputação e Avaliações
 - [ ] **Etapa 5**: Dashboard Simples no Perfil
 
 ---
@@ -80,17 +80,16 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 > **Objetivo**: Estabelecer confiança na comunidade permitindo notas e depoimentos após trocas concluídas com sucesso.
 
 ### Tarefas
-- [ ] **4.1. Ajuste no Modelo Prisma**
-  - [ ] Vincular `Avaliacao` à `Troca` (`id_troca Int` com relação opcional ou única para evitar avaliações duplicadas por troca).
-  - [ ] Rodar `npm run prisma:push` e `npm run prisma:generate`.
-- [ ] **4.2. API de Avaliação**
-  - [ ] Criar `POST /api/avaliacoes` com validação Zod (`nota` de 1 a 5, `comentario` opcional, verificação se a troca foi realmente `CONCLUIDA`).
-- [ ] **4.3. Interface de Feedback / Avaliação**
-  - [ ] Adicionar botão "Avaliar Troca" no histórico da página `/trocas` para trocas concluídas ainda não avaliadas.
-  - [ ] Criar modal ou formulário inline com seletor de estrelas interativo (1 a 5).
-- [ ] **4.4. Exibição da Reputação**
-  - [ ] No `/perfil`: calcular e exibir a nota média, total de avaliações e lista dos últimos comentários recebidos.
-  - [ ] Em `/itens/[id]` e nos cards do feed: exibir badge com média do anunciante (ex: `★ 4.9 (12 avaliações)`).
+- [x] **4.1. Ajuste no Modelo Prisma**
+  - [x] Vincular `Avaliacao` à `Troca` (`id_troca Int` com relação opcional ou única para evitar avaliações duplicadas por troca).
+  - [x] Rodar `npm run prisma:push` e `npm run prisma:generate`.
+- [x] **4.2. API de Avaliação**
+  - [x] Criar `POST /api/avaliacoes` com validação Zod (`nota` de 1 a 5, `comentario` opcional, verificação se a troca foi realmente `ACEITA`).
+- [x] **4.3. Interface de Feedback / Avaliação**
+  - [x] Adicionar botão "Avaliar Troca" no histórico da página `/trocas` para trocas concluídas ainda não avaliadas.
+  - [x] Criar modal ou formulário inline com seletor de estrelas interativo (1 a 5).
+- [x] **4.4. Exibição da Reputação**
+  - [x] No `/perfil`: calcular e exibir a nota média, total de avaliações e lista dos últimos comentários recebidos.
 
 ---
 

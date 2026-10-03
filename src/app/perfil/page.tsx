@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
-import { User, MapPin, Mail, Calendar, Package, PlusCircle, Heart } from 'lucide-react';
+import { User, MapPin, Mail, Calendar, Package, PlusCircle, Heart, Star, MessageSquare } from 'lucide-react';
 import FavoriteButton from '@/components/FavoriteButton';
 import styles from './perfil.module.css';
 
@@ -13,7 +13,7 @@ export default async function PerfilPage() {
     redirect('/login');
   }
 
-  const [itens, trocasRealizadasCount, favoritos] = await Promise.all([
+  const [itens, trocasRealizadasCount, favoritos, avaliacoesRecebidas] = await Promise.all([
     prisma.item.findMany({
       where: { id_usuario: user.id_usuario },
       include: { categoria: true },
@@ -42,7 +42,20 @@ export default async function PerfilPage() {
       },
       orderBy: { data_cadastro: 'desc' },
     }),
+    prisma.avaliacao.findMany({
+      where: { id_avaliado: user.id_usuario },
+      include: {
+        avaliador: true,
+      },
+      orderBy: { data_cadastro: 'desc' },
+    }),
   ]);
+
+  // Calcular reputação média do usuário logado
+  const totalAvaliacoes = avaliacoesRecebidas.length;
+  const ratingMedio = totalAvaliacoes > 0
+    ? Number((avaliacoesRecebidas.reduce((acc, curr) => acc + curr.nota, 0) / totalAvaliacoes).toFixed(1))
+    : 0;
 
   return (
     <div className={styles.wrapper}>
@@ -68,6 +81,18 @@ export default async function PerfilPage() {
         </div>
 
         <div className={styles.statBadges}>
+          <div className={styles.statBadge}>
+            <span className={styles.statNum}>
+              {totalAvaliacoes > 0 ? (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
+                  {ratingMedio} <Star size={16} fill="#FF9F1C" color="#FF9F1C" />
+                </span>
+              ) : (
+                '—'
+              )}
+            </span>
+            <span className={styles.statTxt}>{totalAvaliacoes} {totalAvaliacoes === 1 ? 'Avaliação' : 'Avaliações'}</span>
+          </div>
           <div className={styles.statBadge}>
             <span className={styles.statNum}>{itens.length}</span>
             <span className={styles.statTxt}>Itens Cadastrados</span>
@@ -198,6 +223,53 @@ export default async function PerfilPage() {
                 </div>
               );
             })}
+          </div>
+        )}
+      </div>
+      {/* Seção de Avaliações Recebidas */}
+      <div className={styles.itensSection}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>
+            <MessageSquare size={22} color="#1F3C88" /> Avaliações Recebidas ({totalAvaliacoes})
+          </h2>
+        </div>
+
+        {totalAvaliacoes === 0 ? (
+          <div className={styles.empty}>
+            <p>Você ainda não recebeu nenhuma avaliação de outros usuários.</p>
+          </div>
+        ) : (
+          <div className={styles.commentsList}>
+            {avaliacoesRecebidas.map((av) => (
+              <div key={av.id_avaliacao} className={styles.commentCard}>
+                <div className={styles.commentHeader}>
+                  <div className={styles.commentUser}>
+                    <div className={styles.avatarSmall}>
+                      {av.avaliador.nome.slice(0, 1).toUpperCase()}
+                    </div>
+                    <div>
+                      <strong className={styles.commentAuthor}>{av.avaliador.nome}</strong>
+                      <div className={styles.commentDate}>
+                        {new Date(av.data_cadastro).toLocaleDateString('pt-BR')}
+                      </div>
+                    </div>
+                  </div>
+                  <div className={styles.commentRating}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        size={14}
+                        fill={star <= av.nota ? '#FF9F1C' : 'transparent'}
+                        color={star <= av.nota ? '#FF9F1C' : '#cbd5e1'}
+                      />
+                    ))}
+                  </div>
+                </div>
+                {av.comentario && (
+                  <p className={styles.commentText}>&ldquo;{av.comentario}&rdquo;</p>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
