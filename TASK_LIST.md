@@ -10,7 +10,7 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 - [x] **Etapa 2**: Favoritos
 - [x] **Etapa 3**: Histórico de Trocas
 - [x] **Etapa 4**: Reputação e Avaliações
-- [ ] **Etapa 5**: Dashboard Simples no Perfil
+- [x] **Etapa 5**: Dashboard Simples no Perfil
 
 ---
 
@@ -95,22 +95,16 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 
 ## 📊 Etapa 5: Dashboard Simples no Perfil
 
-> **Objetivo**: Oferecer ao usuário um painel analítico com métricas de engajamento, trocas e impacto ambiental positivo.
+> **Objetivo**: Oferecer ao usuário um painel analítico pessoal com métricas de engajamento, trocas e atividades recentes reais.
 
 ### Tarefas
-- [ ] **5.1. Agregação de Dados e Consultas**
-  - [ ] Criar queries otimizadas no Server Component do `/perfil`:
-    - Total de itens cadastrados e ativos vs trocados.
-    - Total de trocas concluídas com sucesso.
-    - Média geral de reputação e avaliações recebidas.
-    - Estimativa de impacto ecológico (ex: ~2.5 kg de resíduos e CO₂ evitados por item trocado).
-- [ ] **5.2. Componentes de UI do Dashboard**
-  - [ ] Criar cards de estatísticas destacados (estilo KPI cards) com ícones e variações de cores (`#1F3C88` e `#FF9F1C`).
-  - [ ] Adicionar barra de progresso ou gráfico em CSS puro para divisão de itens por categoria.
-  - [ ] Adicionar seção de "Destaque de Impacto Sustentável" com selo de economia circular.
-- [ ] **5.3. Responsividade e Polimento**
-  - [ ] Garantir layout fluido e legível em telas móveis e desktop.
-  - [ ] Verificar consistência estética com os módulos CSS existentes.
+- [x] **5.1. Agregação de Dados e Consultas**
+  - [x] Queries otimizadas e eficientes no Server Component do `/perfil` (itens, trocas ACEITA, favoritos, avaliações e histórico recente).
+- [x] **5.2. Componentes de UI do Dashboard (Resumo)**
+  - [x] Cards compactos, responsivos e clicáveis (Meus Itens, Trocas Realizadas, Favoritos e Reputação com tratamento gracioso de sem avaliações).
+  - [x] Seção de "Atividade recente" baseada exclusivamente em dados reais existentes.
+- [x] **5.3. Responsividade e Polimento**
+  - [x] Layout fluido em desktop e mobile com CSS Modules seguindo a paleta oficial.
 
 ---
 
