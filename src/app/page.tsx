@@ -121,7 +121,7 @@ export default async function HomePage() {
               <div className={styles.featureIcon}>
                 <ShieldCheck size={28} />
               </div>
-              <h3 className={styles.featureTitle}>A Solução ReUse!</h3>
+              <h3 className={styles.featureTitle}>A Solução ReUse</h3>
               <p className={styles.featureText}>
                 Uma ponte direta entre membros da comunidade local. Você publica itens que não usa mais, explora ofertas de interesse e negocia trocas justas, sem transações financeiras.
               </p>

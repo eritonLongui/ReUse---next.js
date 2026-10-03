@@ -46,7 +46,7 @@ export default function LoginPage() {
         <div className={styles.headerArea}>
           <Image
             src="/images/logotipo.png"
-            alt="ReUse!"
+            alt="ReUse"
             width={140}
             height={45}
             className={styles.logo}
@@ -84,7 +84,7 @@ export default function LoginPage() {
           </div>
 
           <button type="submit" className={styles.submitBtn} disabled={loading}>
-            {loading ? 'Entrando...' : 'Entrar no ReUse!'}
+            {loading ? 'Entrando...' : 'Entrar no ReUse'}
           </button>
         </form>
 

@@ -1,6 +1,6 @@
 # TASK_LIST.md — Checklist de Implementação em 5 Etapas
 
-Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de execução das 5 próximas funcionalidades do **ReUse!**.
+Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de execução das 5 próximas funcionalidades do **ReUse**.
 
 ---
 

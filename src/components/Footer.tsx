@@ -16,7 +16,7 @@ export default function Footer() {
                 height={32}
                 style={{ objectFit: 'contain' }}
               />
-              <span>ReUse!</span>
+              <span>ReUse</span>
             </div>
             <p className={styles.brandDesc}>
               Plataforma digital voltada à economia sustentável, reutilização de produtos e consumo consciente. Troque. Reutilize. Transforme.
@@ -46,7 +46,7 @@ export default function Footer() {
           <div>
             <h4 className={styles.colTitle}>Acadêmico</h4>
             <ul className={styles.linkList}>
-              <li className={styles.linkItem}><span style={{ color: '#6b7280' }}>FIAP — Next.js & Prisma</span></li>
+              <li className={styles.linkItem}><span style={{ color: '#6b7280' }}>FIAP | Next.js & Prisma</span></li>
               <li className={styles.linkItem}><span style={{ color: '#6b7280' }}>PostgreSQL Relacional</span></li>
               <li className={styles.linkItem}><span style={{ color: '#6b7280' }}>Economia Circular</span></li>
               <li className={styles.linkItem}><span style={{ color: '#6b7280' }}>Sprint Web 2026</span></li>
@@ -55,7 +55,7 @@ export default function Footer() {
         </div>
 
         <div className={styles.bottomBar}>
-          <div>© {new Date().getFullYear()} ReUse! — Todos os direitos reservados.</div>
+          <div>© {new Date().getFullYear()} ReUse | Todos os direitos reservados.</div>
           <div>Desenvolvido com Next.js, Prisma ORM e PostgreSQL.</div>
         </div>
       </div>

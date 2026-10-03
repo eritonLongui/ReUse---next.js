@@ -87,7 +87,7 @@ export default function CadastroPage() {
         <div className={styles.headerArea}>
           <Image
             src="/images/logotipo.png"
-            alt="ReUse!"
+            alt="ReUse"
             width={140}
             height={45}
             className={styles.logo}

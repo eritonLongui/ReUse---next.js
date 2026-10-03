@@ -13,7 +13,7 @@ export default async function Header() {
         <Link href="/" className={styles.logoArea}>
           <Image
             src="/images/sombreado.png"
-            alt="ReUse!"
+            alt="ReUse"
             width={140}
             height={45}
             className={styles.logoImage}

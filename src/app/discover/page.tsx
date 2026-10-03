@@ -132,7 +132,7 @@ export default async function DiscoverPage({
         <div>
           <h1 className={styles.title}>Feed de Trocas</h1>
           <p className={styles.subtitle}>
-            Explore objetos disponíveis para troca perto de você na comunidade ReUse!
+            Explore objetos disponíveis para troca perto de você na comunidade ReUse
           </p>
         </div>
 

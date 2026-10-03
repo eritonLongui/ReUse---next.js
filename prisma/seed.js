@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
+<<<<<<< HEAD
   console.log('--- Iniciando seed ampliado do ReUse! ---');
 
   // Limpeza de tabelas dependentes para garantir dados consistentes
@@ -12,6 +13,9 @@ async function main() {
   await prisma.itemTroca.deleteMany({});
   await prisma.troca.deleteMany({});
   await prisma.item.deleteMany({});
+=======
+  console.log('Iniciando seed do ReUse...');
+>>>>>>> 59d1979 (alterações e ajustes)
 
   // 1. Categorias Oficiais
   const categoriasData = [
@@ -239,6 +243,7 @@ async function main() {
   }
   console.log(`✓ ${itensCriados.length} itens cadastrados no catálogo.`);
 
+<<<<<<< HEAD
   const itemKindle = itensCriados[0];
   const itemFone = itensCriados[1];
   const itemMochila = itensCriados[2];
@@ -379,6 +384,9 @@ async function main() {
 
   console.log('✓ Lista de itens favoritos configurada.');
   console.log('--- Seed do ReUse! finalizado com sucesso absoluto! ---');
+=======
+  console.log('Seed do ReUse concluído com êxito!');
+>>>>>>> 59d1979 (alterações e ajustes)
 }
 
 main()
