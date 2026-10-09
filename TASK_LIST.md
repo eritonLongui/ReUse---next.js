@@ -118,17 +118,15 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
   - [x] Definir catálogo de intents e schemas Zod para ações e consultas estruturadas.
   - [x] Criar especificações dos payloads de entrada e saída para integração com o watsonx.
   - [x] Documentar o fluxo de autorização server-side baseado em sessão HttpOnly.
-- [ ] **6.2. Camada Segura de Ações e Consultas do Backend**
-  - [ ] Criar serviço isolado para despacho de intenções seguras (`src/lib/assistant/actions.ts`).
-  - [ ] Implementar consultas autorizadas:
-    - [ ] `consultar_trocas_pendentes` (recebidas e enviadas).
-    - [ ] `consultar_meus_itens` (itens cadastrados e status).
-    - [ ] `consultar_favoritos` (itens salvos).
-    - [ ] `consultar_reputacao` (nota média e total de avaliações).
-  - [ ] Implementar ações autorizadas:
-    - [ ] `alternar_disponibilidade_item` (pausar/reativar anúncio próprio).
-    - [ ] `favoritar_item` e `desfavoritar_item`.
-    - [ ] `buscar_itens` (mapeamento para busca com filtros e distância).
+- [x] **6.2. Camada Segura de Ações e Consultas do Backend**
+  - [x] Criar serviço isolado para despacho de intenções seguras (`src/lib/assistant/actions.ts`).
+  - [x] Implementar consultas autorizadas:
+    - [x] `consultar_trocas_pendentes` (recebidas e enviadas).
+    - [x] `consultar_meus_itens` (itens cadastrados e status).
+    - [x] `consultar_reputacao` (nota média e total de avaliações).
+  - [x] Implementar ações autorizadas:
+    - [x] `alternar_disponibilidade_item` (pausar/reativar anúncio próprio).
+    - [x] `buscar_itens` (mapeamento para busca com filtros e distância).
 - [ ] **6.3. Base de Conhecimento e Respostas de Orientação (FAQ / Ajuda)**
   - [ ] Mapear respostas estruturadas de orientação da plataforma:
     - [ ] Como criar conta e autenticar.
