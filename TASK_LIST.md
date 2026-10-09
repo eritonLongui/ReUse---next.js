@@ -127,14 +127,14 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
   - [x] Implementar ações autorizadas:
     - [x] `alternar_disponibilidade_item` (pausar/reativar anúncio próprio).
     - [x] `buscar_itens` (mapeamento para busca com filtros e distância).
-- [ ] **6.3. Base de Conhecimento e Respostas de Orientação (FAQ / Ajuda)**
-  - [ ] Mapear respostas estruturadas de orientação da plataforma:
-    - [ ] Como criar conta e autenticar.
-    - [ ] Como cadastrar um objeto.
-    - [ ] Como funciona a busca por proximidade geográfica.
-    - [ ] Como enviar, responder ou cancelar uma proposta de troca.
-    - [ ] Como avaliar usuários e consultar reputação.
-  - [ ] Gerar links contextuais para navegação direta (`/itens/novo`, `/discover`, `/trocas`, `/perfil`).
+- [x] **6.3. Base de Conhecimento e Respostas de Orientação (FAQ / Ajuda)**
+  - [x] Mapear respostas estruturadas de orientação da plataforma:
+    - [x] Como criar conta e autenticar.
+    - [x] Como cadastrar um objeto.
+    - [x] Como funciona a busca por proximidade geográfica.
+    - [x] Como enviar, responder ou cancelar uma proposta de troca.
+    - [x] Como avaliar usuários e consultar reputação.
+  - [x] Gerar links contextuais para navegação direta (`/itens/novo`, `/discover`, `/trocas`, `/perfil`).
 - [ ] **6.4. Interface Conversacional (Chat Widget no Frontend)**
   - [ ] Criar componente de chat flutuante acessível globalmente em `src/app/layout.tsx`.
   - [ ] Implementar visual aderente à paleta ReUse (`#1F3C88`, `#FF9F1C`, CSS Modules).
