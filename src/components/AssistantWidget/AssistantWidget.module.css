@@ -1,0 +1,281 @@
+.container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 999;
+  font-family: inherit;
+}
+
+/* Botão Flutuante */
+.floatingButton {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background-color: #1F3C88;
+  color: #FFFFFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(31, 60, 136, 0.4);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.floatingButton:hover {
+  transform: scale(1.05);
+  background-color: #172e6b;
+}
+
+/* Janela do Chat */
+.chatWindow {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1.5rem;
+  width: 380px;
+  max-width: calc(100vw - 2rem);
+  height: 540px;
+  max-height: calc(100vh - 7rem);
+  background: #FFFFFF;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #E2E8F0;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.header {
+  background: #1F3C88;
+  color: #FFFFFF;
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerTitleBox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.headerTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.headerSubtitle {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  margin: 0;
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Área de Mensagens */
+.messagesArea {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.messageRow {
+  display: flex;
+  flex-direction: column;
+}
+
+.messageRowUser {
+  align-items: flex-end;
+}
+
+.messageRowAssistant {
+  align-items: flex-start;
+}
+
+.bubble {
+  max-width: 82%;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+.bubbleUser {
+  background-color: #1F3C88;
+  color: #FFFFFF;
+  border-bottom-right-radius: 2px;
+}
+
+.bubbleAssistant {
+  background-color: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #E2E8F0;
+  border-bottom-left-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Quick Actions / Botões de Ação */
+.quickActionsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.quickActionBtn {
+  background-color: #EEF2FF;
+  color: #1F3C88;
+  border: 1px solid #C7D2FE;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border-radius: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.quickActionBtn:hover {
+  background-color: #FF9F1C;
+  color: #FFFFFF;
+  border-color: #FF9F1C;
+}
+
+/* Loading Indicator */
+.loadingBubble {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.6rem 0.9rem;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  width: fit-content;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: #94A3B8;
+  border-radius: 50%;
+  animation: pulse 1s infinite alternate;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Footer / Formulário de Entrada */
+.footer {
+  padding: 0.75rem 0.9rem;
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+}
+
+.inputForm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inputField {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.inputField:focus {
+  border-color: #1F3C88;
+}
+
+.sendButton {
+  background-color: #FF9F1C;
+  color: #FFFFFF;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.sendButton:hover:not(:disabled) {
+  background-color: #f08e0b;
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsividade Mobile */
+@media (max-width: 480px) {
+  .chatWindow {
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+    bottom: 5rem;
+    height: 70vh;
+  }
+}

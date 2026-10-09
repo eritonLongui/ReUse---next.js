@@ -135,11 +135,11 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
     - [x] Como enviar, responder ou cancelar uma proposta de troca.
     - [x] Como avaliar usuários e consultar reputação.
   - [x] Gerar links contextuais para navegação direta (`/itens/novo`, `/discover`, `/trocas`, `/perfil`).
-- [ ] **6.4. Interface Conversacional (Chat Widget no Frontend)**
-  - [ ] Criar componente de chat flutuante acessível globalmente em `src/app/layout.tsx`.
-  - [ ] Implementar visual aderente à paleta ReUse (`#1F3C88`, `#FF9F1C`, CSS Modules).
-  - [ ] Suportar cards de ação rápida (botões interativos para navegar, alternar disponibilidade de item ou ver trocas).
-  - [ ] Tratar estados de loading, mensagens de erro amigáveis e feedback de ações executadas.
+- [x] **6.4. Interface Conversacional (Chat Widget no Frontend)**
+  - [x] Criar componente de chat flutuante acessível globalmente em `src/app/layout.tsx`.
+  - [x] Implementar visual aderente à paleta ReUse (`#1F3C88`, `#FF9F1C`, CSS Modules).
+  - [x] Suportar cards de ação rápida (botões interativos para navegar, alternar disponibilidade de item ou ver trocas).
+  - [x] Tratar estados de loading, mensagens de erro amigáveis e feedback de ações executadas.
 - [ ] **6.5. Endpoint de Integração com IBM watsonx e Conexão Externa**
   - [ ] Criar Route Handler protegido `/api/assistente` (com validação Zod e checagem de sessão).
   - [ ] Implementar cliente/adaptador desacoplado para chamada ao IBM watsonx (Assistant API v2).
