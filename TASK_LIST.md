@@ -11,7 +11,7 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 - [x] **Etapa 3**: Histórico de Trocas
 - [x] **Etapa 4**: Reputação e Avaliações
 - [x] **Etapa 5**: Dashboard Simples no Perfil
-- [ ] **Etapa 6**: Assistente Virtual com IBM watsonx (Execução & Orientação)
+- [x] **Etapa 6**: Assistente Virtual com IBM watsonx (Execução & Orientação)
 
 ---
 
@@ -145,10 +145,10 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
   - [x] Implementar cliente/adaptador desacoplado para chamada ao IBM watsonx (Assistant API v2).
   - [x] Configurar variáveis de ambiente seguras (`WATSONX_API_KEY`, `WATSONX_SERVICE_URL`, `WATSONX_ASSISTANT_ID`, etc.).
   - [x] Tratar fallback gracioso em caso de indisponibilidade da API externa.
-- [ ] **6.6. Validação, Testes e Documentação**
-  - [ ] Testar cenários autenticados vs não autenticados (garantir que ações restritas sejam bloqueadas).
-  - [ ] Validar que nenhum usuário consiga alterar ou visualizar dados privados de terceiros via intenções.
-  - [ ] Validar build (`npm run lint` e `npm run build`).
+- [x] **6.6. Validação, Testes e Documentação**
+  - [x] Testar cenários autenticados vs não autenticados (garantir que ações restritas sejam bloqueadas).
+  - [x] Validar que nenhum usuário consiga alterar ou visualizar dados privados de terceiros via intenções.
+  - [x] Validar build (`npm run lint` e `npm run build`).
 
 ---
 
