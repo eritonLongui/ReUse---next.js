@@ -11,6 +11,7 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 - [x] **Etapa 3**: Histórico de Trocas
 - [x] **Etapa 4**: Reputação e Avaliações
 - [x] **Etapa 5**: Dashboard Simples no Perfil
+- [ ] **Etapa 6**: Assistente Virtual com IBM watsonx (Execução & Orientação)
 
 ---
 
@@ -108,8 +109,53 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
 
 ---
 
+## 🤖 Etapa 6: Assistente Virtual com IBM watsonx (Execução & Orientação)
+ 
+> **Objetivo**: Integrar um assistente virtual conversacional capaz de responder dúvidas sobre a plataforma e executar consultas e ações seguras autorizadas pelo usuário autenticado.
+ 
+### Tarefas
+- [x] **6.1. Contrato e Arquitetura da Camada de Assistente**
+  - [x] Definir catálogo de intents e schemas Zod para ações e consultas estruturadas.
+  - [x] Criar especificações dos payloads de entrada e saída para integração com o watsonx.
+  - [x] Documentar o fluxo de autorização server-side baseado em sessão HttpOnly.
+- [ ] **6.2. Camada Segura de Ações e Consultas do Backend**
+  - [ ] Criar serviço isolado para despacho de intenções seguras (`src/lib/assistant/actions.ts`).
+  - [ ] Implementar consultas autorizadas:
+    - [ ] `consultar_trocas_pendentes` (recebidas e enviadas).
+    - [ ] `consultar_meus_itens` (itens cadastrados e status).
+    - [ ] `consultar_favoritos` (itens salvos).
+    - [ ] `consultar_reputacao` (nota média e total de avaliações).
+  - [ ] Implementar ações autorizadas:
+    - [ ] `alternar_disponibilidade_item` (pausar/reativar anúncio próprio).
+    - [ ] `favoritar_item` e `desfavoritar_item`.
+    - [ ] `buscar_itens` (mapeamento para busca com filtros e distância).
+- [ ] **6.3. Base de Conhecimento e Respostas de Orientação (FAQ / Ajuda)**
+  - [ ] Mapear respostas estruturadas de orientação da plataforma:
+    - [ ] Como criar conta e autenticar.
+    - [ ] Como cadastrar um objeto.
+    - [ ] Como funciona a busca por proximidade geográfica.
+    - [ ] Como enviar, responder ou cancelar uma proposta de troca.
+    - [ ] Como avaliar usuários e consultar reputação.
+  - [ ] Gerar links contextuais para navegação direta (`/itens/novo`, `/discover`, `/trocas`, `/perfil`).
+- [ ] **6.4. Interface Conversacional (Chat Widget no Frontend)**
+  - [ ] Criar componente de chat flutuante acessível globalmente em `src/app/layout.tsx`.
+  - [ ] Implementar visual aderente à paleta ReUse (`#1F3C88`, `#FF9F1C`, CSS Modules).
+  - [ ] Suportar cards de ação rápida (botões interativos para navegar, alternar disponibilidade de item ou ver trocas).
+  - [ ] Tratar estados de loading, mensagens de erro amigáveis e feedback de ações executadas.
+- [ ] **6.5. Endpoint de Integração com IBM watsonx e Conexão Externa**
+  - [ ] Criar Route Handler protegido `/api/assistente` (com validação Zod e checagem de sessão).
+  - [ ] Implementar cliente/adaptador desacoplado para chamada ao IBM watsonx (Assistant API v2).
+  - [ ] Configurar variáveis de ambiente seguras (`WATSONX_API_KEY`, `WATSONX_SERVICE_URL`, `WATSONX_ASSISTANT_ID`, etc.).
+  - [ ] Tratar fallback gracioso em caso de indisponibilidade da API externa.
+- [ ] **6.6. Validação, Testes e Documentação**
+  - [ ] Testar cenários autenticados vs não autenticados (garantir que ações restritas sejam bloqueadas).
+  - [ ] Validar que nenhum usuário consiga alterar ou visualizar dados privados de terceiros via intenções.
+  - [ ] Validar build (`npm run lint` e `npm run build`).
+
+---
+
 ## 💡 Guia de Execução para os Agentes
 
-1. Selecione a etapa com tarefas pendentes na ordem numérica (Etapa 1 -> Etapa 2 -> Etapa 3 -> Etapa 4 -> Etapa 5).
+1. Selecione a etapa com tarefas pendentes na ordem numérica (Etapa 1 -> Etapa 2 -> Etapa 3 -> Etapa 4 -> Etapa 5 -> Etapa 6).
 2. Marque a caixa de seleção com `[x]` à medida que cada subtarefa for completada.
 3. Não inicie uma etapa subsequente sem antes validar as alterações e o build da etapa atual.
