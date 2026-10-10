@@ -11,24 +11,80 @@ import {
 import { getFaqResponse } from '@/lib/assistant/faq';
 import { sendWatsonxAssistantMessage } from '@/lib/assistant/watsonClient';
 
+// Ações e consultas reais da plataforma que têm implementação no backend (actions.ts)
+const IMPLEMENTED_BACKEND_ACTIONS = [
+  'consultar_trocas_pendentes',
+  'consultar_meus_itens',
+  'pausar_item',
+  'reativar_item',
+  'consultar_reputacao',
+  'buscar_itens',
+] as const;
+
+function isImplementedBackendAction(intentName: string): boolean {
+  return (IMPLEMENTED_BACKEND_ACTIONS as readonly string[]).includes(intentName);
+}
+
 /**
- * Heurística local de fallback quando o watsonx não estiver configurado ou offline
+ * Heurística local de fallback e detecção de ações da plataforma
  */
 function detectLocalIntent(text: string): { intent: string; params: Record<string, unknown> } {
   const normalized = text.toLowerCase();
 
-  if (normalized.includes('troca') && (normalized.includes('pendente') || normalized.includes('recebi') || normalized.includes('enviad'))) {
+  // 1. Ações e consultas de dados da conta (alta prioridade local)
+  if (
+    normalized.includes('troca') &&
+    (normalized.includes('pendente') ||
+      normalized.includes('recebi') ||
+      normalized.includes('enviad') ||
+      normalized.includes('minhas troca') ||
+      normalized.includes('proposta'))
+  ) {
     return { intent: 'consultar_trocas_pendentes', params: {} };
   }
 
-  if (normalized.includes('meus item') || normalized.includes('meus objeto') || normalized.includes('itens cadastrado') || normalized.includes('meus anuncio')) {
+  if (
+    normalized.includes('meus item') ||
+    normalized.includes('meus objeto') ||
+    normalized.includes('itens cadastrado') ||
+    normalized.includes('meus anuncio') ||
+    normalized.includes('anúncios cadastrados')
+  ) {
     return { intent: 'consultar_meus_itens', params: {} };
   }
 
-  if (normalized.includes('reputa') || normalized.includes('avalia') || normalized.includes('minha nota') || normalized.includes('estrela')) {
+  if (
+    normalized.includes('pausar') &&
+    (normalized.includes('item') || normalized.includes('anúncio') || normalized.includes('objeto'))
+  ) {
+    return { intent: 'pausar_item', params: {} };
+  }
+
+  if (
+    normalized.includes('reativar') &&
+    (normalized.includes('item') || normalized.includes('anúncio') || normalized.includes('objeto'))
+  ) {
+    return { intent: 'reativar_item', params: {} };
+  }
+
+  if (
+    normalized.includes('reputa') ||
+    normalized.includes('avalia') ||
+    normalized.includes('minha nota') ||
+    normalized.includes('minhas estrela')
+  ) {
     return { intent: 'consultar_reputacao', params: {} };
   }
 
+  if (
+    normalized.startsWith('buscar') ||
+    normalized.startsWith('procurar') ||
+    normalized.startsWith('encontrar')
+  ) {
+    return { intent: 'buscar_itens', params: { termo: text.replace(/^(buscar|procurar|encontrar)\s*/i, '').trim() } };
+  }
+
+  // 2. Dúvidas informativas / orientações (podem ser atendidas pelo IBM Orchestrate ou FAQ local)
   if (normalized.includes('como cadastrar') || normalized.includes('como anunciar') || normalized.includes('publicar item')) {
     return { intent: 'ajuda_cadastrar_item', params: {} };
   }
@@ -43,10 +99,6 @@ function detectLocalIntent(text: string): { intent: string; params: Record<strin
 
   if (normalized.includes('como avaliar')) {
     return { intent: 'ajuda_avaliar', params: {} };
-  }
-
-  if (normalized.includes('buscar') || normalized.includes('procurar') || normalized.includes('encontrar')) {
-    return { intent: 'buscar_itens', params: { termo: text.replace(/buscar|procurar|encontrar/gi, '').trim() } };
   }
 
   return { intent: 'ajuda_geral', params: {} };
@@ -67,24 +119,40 @@ export async function POST(req: Request) {
     const { message, sessionId } = parsed.data;
     const currentUser = await getCurrentUser();
 
-    // 1. Tentar obter resposta conversacional do agente IBM watsonx Orchestrate via A2A
-    const orchestrateResult = await sendWatsonxAssistantMessage(message, sessionId);
+    let intent = '';
+    let entities: Record<string, unknown> = {};
+    let activeSessionId: string | undefined = sessionId;
+    let orchestrateReply: string | undefined = undefined;
 
-    let intent = orchestrateResult?.intent;
-    let entities = orchestrateResult?.entities || {};
-    const orchestrateReply = orchestrateResult?.replyText;
-    const activeSessionId = orchestrateResult?.sessionId || sessionId;
-
-    // Detecta intenção local da plataforma
+    // Identifica intenção local da plataforma a partir da mensagem
     const local = detectLocalIntent(message);
 
-    // Se o agente Orchestrate da IBM respondeu com texto, damos prioridade absoluta à inteligência do agente!
-    if (orchestrateReply && orchestrateReply.trim().length > 0) {
-      intent = 'resposta_agente_orchestrate';
-    } else {
-      // Somente se o agente da IBM não responder ou não estiver configurado, usamos o fallback local
+    // Prioridade de Roteamento:
+    // 1. Se a mensagem do usuário for uma ação/consulta de dados com implementação no backend,
+    //    executamos a função local segura com os dados reais do usuário (actions.ts).
+    if (isImplementedBackendAction(local.intent)) {
       intent = local.intent;
       entities = local.params;
+    } else {
+      // 2. Para dúvidas gerais, orientações ou conversas livres:
+      // Tentar obter resposta conversacional do agente IBM watsonx Orchestrate via A2A
+      const orchestrateResult = await sendWatsonxAssistantMessage(message, sessionId);
+
+      intent = orchestrateResult?.intent || '';
+      entities = orchestrateResult?.entities || {};
+      orchestrateReply = orchestrateResult?.replyText;
+      if (orchestrateResult?.sessionId) {
+        activeSessionId = orchestrateResult.sessionId;
+      }
+
+      if (orchestrateReply && orchestrateReply.trim().length > 0) {
+        // Primeira opção para dúvidas e conversa geral: o agente IBM watsonx Orchestrate
+        intent = 'resposta_agente_orchestrate';
+      } else {
+        // Fallback local caso o agente da IBM não responda ou não esteja configurado
+        intent = local.intent;
+        entities = local.params;
+      }
     }
 
     // 2. Despacho seguro de ações conforme a intenção identificada
