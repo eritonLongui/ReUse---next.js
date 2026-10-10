@@ -140,14 +140,15 @@ Este arquivo lista detalhadamente os requisitos, tarefas técnicas e status de e
   - [x] Implementar visual aderente à paleta ReUse (`#1F3C88`, `#FF9F1C`, CSS Modules).
   - [x] Suportar cards de ação rápida (botões interativos para navegar, alternar disponibilidade de item ou ver trocas).
   - [x] Tratar estados de loading, mensagens de erro amigáveis e feedback de ações executadas.
-- [x] **6.5. Endpoint de Integração com IBM watsonx e Conexão Externa**
+- [x] **6.5. Endpoint de Integração com IBM watsonx Orchestrate A2A**
   - [x] Criar Route Handler protegido `/api/assistente` (com validação Zod e checagem de sessão).
-  - [x] Implementar cliente/adaptador desacoplado para chamada ao IBM watsonx (Assistant API v2).
-  - [x] Configurar variáveis de ambiente seguras (`WATSONX_API_KEY`, `WATSONX_SERVICE_URL`, `WATSONX_ASSISTANT_ID`, etc.).
-  - [x] Tratar fallback gracioso em caso de indisponibilidade da API externa.
+  - [x] Implementar cliente desacoplado para chamada ao IBM watsonx Orchestrate via protocolo A2A e autenticação IAM (`src/lib/assistant/watsonClient.ts`).
+  - [x] Configurar variáveis de ambiente seguras (`WATSONX_ORCHESTRATE_API_KEY`, `WATSONX_ORCHESTRATE_AGENT_URL`).
+  - [x] Tratar fallback gracioso em caso de indisponibilidade ou ausência de credenciais.
 - [x] **6.6. Validação, Testes e Documentação**
   - [x] Testar cenários autenticados vs não autenticados (garantir que ações restritas sejam bloqueadas).
   - [x] Validar que nenhum usuário consiga alterar ou visualizar dados privados de terceiros via intenções.
+  - [x] Validar extração A2A, timeouts e erros JSON-RPC.
   - [x] Validar build (`npm run lint` e `npm run build`).
 
 ---

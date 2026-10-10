@@ -1,6 +1,6 @@
-# Contrato e Arquitetura do Assistente Virtual ReUse! (IBM watsonx)
+# Contrato e Arquitetura do Assistente Virtual ReUse! (IBM watsonx Orchestrate A2A)
 
-Este documento descreve os contratos de dados, formatos de requisição/resposta, intenções reconhecidas e garantias de segurança para a integração com o **IBM watsonx Assistant**.
+Este documento descreve os contratos de dados, formatos de requisição/resposta, intenções reconhecidas e garantias de segurança para a integração com o agente nativo do **IBM watsonx Orchestrate** via protocolo **A2A (Agent-to-Agent)**.
 
 ---
 
@@ -13,63 +13,77 @@ Este documento descreve os contratos de dados, formatos de requisição/resposta
            ▼
 [ Next.js Route Handler /api/assistente ]
    ├── 1. Identificação de Sessão Segura via getCurrentUser()
-   ├── 2. Chamada à API v2 do IBM watsonx Assistant (REST API nativa)
-   ├── 3. Detecção de Intent e Entidades estruturadas
-   ├── 4. Se a Intent for uma Ação Protegida:
-   │       └── Despacha para src/lib/assistant/actions.ts (validação Zod + checagem de propriedade)
-   └── 5. Retorno de AssistantResponse unificado
+   ├── 2. Autenticação IBM Cloud IAM (Token Bearer com cache serverless)
+   ├── 3. Envio ao endpoint A2A (JSON-RPC 2.0 message/send com { kind: "text" })
+   ├── 4. Extração de texto robusta do retorno A2A (messages, history, artifacts, conversation_result)
+   ├── 5. Se houver ação de dados (trocas, itens, reputação):
+   │       └── Despacha determinística e seguramente para src/lib/assistant/actions.ts
+   └── 6. Retorno de AssistantResponse padronizado ao frontend
 ```
 
 ---
 
-## 2. Catálogo de Intents de Alta Prioridade
+## 2. Configuração do Agente no IBM watsonx Orchestrate
 
-| Intent | Tipo | Autenticação Exigida? | Descrição |
-| :--- | :--- | :--- | :--- |
-| `consultar_trocas_pendentes` | Consulta | Sim | Retorna propostas recebidas e enviadas com status `PENDENTE`. |
-| `consultar_meus_itens` | Consulta | Sim | Retorna lista dos itens cadastrados pelo usuário autenticado. |
-| `pausar_item` | Mutação | Sim | Altera `disponivel` para `false` do item indicado (apenas se for do usuário). |
-| `reativar_item` | Mutação | Sim | Altera `disponivel` para `true` do item indicado (apenas se for do usuário). |
-| `consultar_reputacao` | Consulta | Sim | Retorna nota média, total de avaliações e comentários recebidos. |
-| `buscar_itens` | Navegação / Busca | Não | Interpreta filtros (categoria, termo, raio) e gera link contextual para `/discover`. |
-| `ajuda_cadastrar_item` | FAQ | Não | Orientações de como anunciar um item com atalho para `/itens/novo`. |
-| `ajuda_fazer_troca` | FAQ | Não | Explica o ciclo de propostas, aceitação e recusa. |
-| `ajuda_proximidade` | FAQ | Não | Explica como o cálculo geográfico e filtros de raio em km funcionam. |
-| `ajuda_avaliar` | FAQ | Não | Explica as regras de reputação após trocas aceitas. |
-| `ajuda_geral` | FAQ | Não | Apresenta as principais funcionalidades da plataforma. |
+- **Endpoint A2A Live**: `https://api.au-syd.watson-orchestrate.cloud.ibm.com/instances/683cf7ca-4458-4c3b-b7df-c6d7f29b2e24/v1/orchestrate/A2A/agents/4c21d327-f8e5-401e-92c7-651e3b6428e1/environment/770cbc64-b448-4ecc-a9bf-6a8c7bccaf51`
+- **Agent ID**: `4c21d327-f8e5-401e-92c7-651e3b6428e1`
+- **Environment ID**: `770cbc64-b448-4ecc-a9bf-6a8c7bccaf51`
+- **Região**: `au-syd`
+- **Autenticação**: IBM Cloud IAM (`https://iam.cloud.ibm.com/identity/token`)
+
+### Variáveis de Ambiente Necessárias (Vercel / Produção)
+* `WATSONX_ORCHESTRATE_API_KEY`: API Key da IBM Cloud com permissão no watsonx Orchestrate.
+* `WATSONX_ORCHESTRATE_AGENT_URL`: URL completa do agente (opcional, fallback padrão configurado para o endpoint Live acima).
 
 ---
 
-## 3. Contrato da API (`POST /api/assistente`)
+## 3. Protocolo A2A (JSON-RPC 2.0)
 
-### 3.1. Entrada (Request)
+### Formato da Requisição Enviada ao Agente
 ```json
 {
-  "message": "Quais propostas de troca eu tenho pendentes?",
-  "sessionId": "opcional-watson-session-id"
+  "jsonrpc": "2.0",
+  "id": "uuid-requisicao",
+  "method": "message/send",
+  "params": {
+    "message": {
+      "messageId": "uuid-mensagem",
+      "role": "user",
+      "parts": [
+        {
+          "kind": "text",
+          "text": "Olá, como funciona a troca de itens no ReUse?"
+        }
+      ]
+    }
+  }
 }
 ```
 
-* Validação com Zod: `message` (obrigatória, entre 1 e 1000 caracteres), `sessionId` (opcional).
+---
 
-### 3.2. Saída (Response)
+## 4. Contrato da API da Aplicação (`POST /api/assistente`)
+
+### 4.1. Entrada (Request do Widget)
 ```json
 {
-  "sessionId": "a1b2c3d4-...",
-  "reply": "Você possui 2 propostas de troca pendentes para seus itens.",
+  "message": "Quais propostas de troca eu tenho pendentes?",
+  "sessionId": "opcional-session-id"
+}
+```
+
+### 4.2. Saída (Response padronizado `AssistantResponse`)
+```json
+{
+  "sessionId": "uuid-sessao",
+  "reply": "Você tem 1 proposta recebida aguardando sua resposta...",
   "intentDetected": "consultar_trocas_pendentes",
-  "data": {
-    "totalRecebidas": 2,
-    "totalEnviadas": 0,
-    "recebidas": [...]
-  },
+  "data": { ... },
   "quickActions": [
     {
       "label": "Ver Minhas Trocas",
       "actionType": "navigate",
-      "payload": {
-        "url": "/trocas"
-      }
+      "payload": { "url": "/trocas" }
     }
   ],
   "requiresAuth": false
@@ -78,9 +92,9 @@ Este documento descreve os contratos de dados, formatos de requisição/resposta
 
 ---
 
-## 4. Garantias de Segurança
+## 5. Garantias de Segurança e Execução Determinística
 
 1. **Sessão Confiável**: A identidade do usuário nunca é aceita via corpo da mensagem do chat ou JSON enviado pelo cliente. O `id_usuario` é extraído exclusivamente via `getCurrentUser()` através do cookie seguro `reuse_session_user`.
-2. **Autorização de Recursos Próprios**: Ao pausar/reativar um item (`pausar_item`), o sistema verifica no banco se `item.id_usuario === currentUser.id_usuario`. Se pertencer a outro usuário, a ação é bloqueada com status 403 / mensagem amigável de erro.
-3. **Credenciais Ocultas**: Nenhuma chave (`WATSONX_API_KEY`) trafega para o navegador. Todas as chamadas para o watsonx Assistant ocorrem do servidor para a nuvem da IBM.
-4. **Fallback Gracioso**: Se o watsonx estiver offline ou se as chaves ainda não estiverem configuradas, o backend responde com base de conhecimento local e orienta o usuário sem quebrar a aplicação.
+2. **Autorização Local de Recursos**: Nenhuma alteração no banco de dados (ex: pausar/reativar item) é executada diretamente a partir de texto de IA. A aplicação valida permissões no backend (garante que `item.id_usuario === currentUser.id_usuario`).
+3. **Credenciais Ocultas**: As chaves `WATSONX_ORCHESTRATE_API_KEY` e tokens IAM nunca trafegam para o cliente e não constam em respostas HTTP.
+4. **Resiliência e Fallback Gracioso**: Caso a API do Orchestrate esteja offline ou a chave não esteja configurada no ambiente local, o backend aciona fallback local amigável sem quebrar a UI.

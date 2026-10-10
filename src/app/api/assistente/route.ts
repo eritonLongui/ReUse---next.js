@@ -67,17 +67,37 @@ export async function POST(req: Request) {
     const { message, sessionId } = parsed.data;
     const currentUser = await getCurrentUser();
 
-    // 1. Tentar obter intenção e entidades do IBM watsonx Assistant
-    const watsonResult = await sendWatsonxAssistantMessage(message, sessionId);
+    // 1. Tentar obter resposta do IBM watsonx Orchestrate via A2A
+    const orchestrateResult = await sendWatsonxAssistantMessage(message, sessionId);
 
-    let intent = watsonResult?.intent;
-    let entities = watsonResult?.entities || {};
-    let watsonReply = watsonResult?.replyText;
-    const activeSessionId = watsonResult?.sessionId || sessionId;
+    let intent = orchestrateResult?.intent;
+    let entities = orchestrateResult?.entities || {};
+    const orchestrateReply = orchestrateResult?.replyText;
+    const activeSessionId = orchestrateResult?.sessionId || sessionId;
 
-    // Se o watsonx não retornou uma intent mapeada ou está em fallback, utiliza detector local
-    if (!intent) {
-      const local = detectLocalIntent(message);
+    // Se o agente do Orchestrate respondeu diretamente via texto conversacional
+    // e não há intenção estruturada explícita retornada:
+    // verificamos se o usuário pediu uma ação local ou consulta estruturada (ex: ver trocas, ver itens, pausar item)
+    const local = detectLocalIntent(message);
+
+    // Se for uma das ações que consultam/alteram o banco de dados da aplicação, usamos a intenção da plataforma
+    const isLocalDatabaseAction = [
+      'consultar_trocas_pendentes',
+      'consultar_meus_itens',
+      'pausar_item',
+      'reativar_item',
+      'consultar_reputacao',
+      'buscar_itens',
+    ].includes(local.intent);
+
+    if (isLocalDatabaseAction) {
+      intent = local.intent;
+      entities = local.params;
+    } else if (orchestrateReply && orchestrateReply.trim().length > 0) {
+      // Se não é uma ação de banco e o Orchestrate retornou resposta, damos prioridade à resposta do agente
+      intent = 'resposta_agente_orchestrate';
+    } else if (!intent) {
+      // Fallback local caso o agente não esteja configurado ou não tenha respondido
       intent = local.intent;
       entities = local.params;
     }
@@ -148,20 +168,23 @@ export async function POST(req: Request) {
       }
 
       default: {
-        // Verifica se é uma intenção de FAQ / Ajuda
-        const faq = getFaqResponse(intent);
-        if (faq) {
-          response = faq;
-        } else if (watsonReply) {
+        // Se a intent for resposta_agente_orchestrate ou se houver texto do Orchestrate
+        if (orchestrateReply) {
           response = {
-            reply: watsonReply,
+            reply: orchestrateReply,
             intentDetected: intent,
           };
         } else {
-          const fallback = getFaqResponse('ajuda_geral');
-          response = fallback || {
-            reply: 'Desculpe, não entendi completamente. Posso ajudar com suas trocas pendentes, seus itens cadastrados ou dúvidas sobre a plataforma.',
-          };
+          // Verifica se é uma intenção de FAQ / Ajuda local
+          const faq = getFaqResponse(intent);
+          if (faq) {
+            response = faq;
+          } else {
+            const fallback = getFaqResponse('ajuda_geral');
+            response = fallback || {
+              reply: 'Desculpe, não entendi completamente. Posso ajudar com suas trocas pendentes, seus itens cadastrados ou dúvidas sobre a plataforma.',
+            };
+          }
         }
         break;
       }
