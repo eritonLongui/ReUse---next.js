@@ -67,7 +67,7 @@ export async function POST(req: Request) {
     const { message, sessionId } = parsed.data;
     const currentUser = await getCurrentUser();
 
-    // 1. Tentar obter resposta do IBM watsonx Orchestrate via A2A
+    // 1. Tentar obter resposta conversacional do agente IBM watsonx Orchestrate via A2A
     const orchestrateResult = await sendWatsonxAssistantMessage(message, sessionId);
 
     let intent = orchestrateResult?.intent;
@@ -75,29 +75,14 @@ export async function POST(req: Request) {
     const orchestrateReply = orchestrateResult?.replyText;
     const activeSessionId = orchestrateResult?.sessionId || sessionId;
 
-    // Se o agente do Orchestrate respondeu diretamente via texto conversacional
-    // e não há intenção estruturada explícita retornada:
-    // verificamos se o usuário pediu uma ação local ou consulta estruturada (ex: ver trocas, ver itens, pausar item)
+    // Detecta intenção local da plataforma
     const local = detectLocalIntent(message);
 
-    // Se for uma das ações que consultam/alteram o banco de dados da aplicação, usamos a intenção da plataforma
-    const isLocalDatabaseAction = [
-      'consultar_trocas_pendentes',
-      'consultar_meus_itens',
-      'pausar_item',
-      'reativar_item',
-      'consultar_reputacao',
-      'buscar_itens',
-    ].includes(local.intent);
-
-    if (isLocalDatabaseAction) {
-      intent = local.intent;
-      entities = local.params;
-    } else if (orchestrateReply && orchestrateReply.trim().length > 0) {
-      // Se não é uma ação de banco e o Orchestrate retornou resposta, damos prioridade à resposta do agente
+    // Se o agente Orchestrate da IBM respondeu com texto, damos prioridade absoluta à inteligência do agente!
+    if (orchestrateReply && orchestrateReply.trim().length > 0) {
       intent = 'resposta_agente_orchestrate';
-    } else if (!intent) {
-      // Fallback local caso o agente não esteja configurado ou não tenha respondido
+    } else {
+      // Somente se o agente da IBM não responder ou não estiver configurado, usamos o fallback local
       intent = local.intent;
       entities = local.params;
     }
